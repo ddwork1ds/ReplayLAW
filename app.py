@@ -668,42 +668,101 @@ def predict_batch(inputs: List[str], batch_size: int = 1) -> List[str]:
     return predictions
 
 
+
 def render_diff_html(old_text: str, new_text: str) -> str:
     old_lines = old_text.splitlines()
     new_lines = new_text.splitlines()
     sm = difflib.SequenceMatcher(None, old_lines, new_lines)
+
     html_parts = [
-        '<div style="font-family: Segoe UI, sans-serif; line-height: 1.7; '
-        'padding: 18px; border: 1px solid #294064; border-radius: 14px; '
-        'background: rgba(12, 25, 48, 0.94); color: #e8efff;">'
+        '<div style="'
+        'font-family: Segoe UI, sans-serif;'
+        'line-height: 1.8;'
+        'padding: 22px;'
+        'border: 2px solid #D6B36A;'
+        'border-radius: 14px;'
+        'background: #FFFFFF;'
+        'color: #17243A;'
+        'box-shadow: 0 12px 35px rgba(0,0,0,.12);'
+        'width: 100%;'
+        'box-sizing: border-box;'
+        '">'
     ]
+
     for tag, i1, i2, j1, j2 in sm.get_opcodes():
+
+        # Nội dung không thay đổi
         if tag == "equal":
             for ln in new_lines[j1:j2]:
-                html_parts.append(f'<div style="margin: 3px 0; color: #e8efff;">{html_esc.escape(ln)}</div>')
+                html_parts.append(
+                    f'<div style="'
+                    f'margin: 6px 0;'
+                    f'padding: 3px 0;'
+                    f'color: #17243A;'
+                    f'font-size: 16px;'
+                    f'">'
+                    f'{html_esc.escape(ln)}'
+                    f'</div>'
+                )
+
+        # Nội dung bị xóa hoặc thay thế
         elif tag in ("replace", "delete"):
             for ln in old_lines[i1:i2]:
                 html_parts.append(
-                    f'<div style="background:#482333; color:#ffd5df; text-decoration:line-through; '
-                    f'padding:4px 8px; border-left:4px solid #fb7185; margin:4px 0; border-radius:4px;">'
-                    f"- {html_esc.escape(ln)}</div>"
+                    f'<div style="'
+                    f'background: #FCE8EC;'
+                    f'color: #8B263D;'
+                    f'text-decoration: line-through;'
+                    f'padding: 9px 12px;'
+                    f'border-left: 5px solid #E8798D;'
+                    f'margin: 6px 0;'
+                    f'border-radius: 5px;'
+                    f'font-size: 16px;'
+                    f'">'
+                    f'- {html_esc.escape(ln)}'
+                    f'</div>'
                 )
+
+            # Nội dung mới được bổ sung sau khi thay thế
             if tag == "replace":
                 for ln in new_lines[j1:j2]:
                     html_parts.append(
-                        f'<div style="background:#123b3a; color:#bbf7e7; font-weight:500; '
-                        f'padding:4px 8px; border-left:4px solid #34d399; margin:4px 0; border-radius:4px;">'
-                        f"+ {html_esc.escape(ln)}</div>"
+                        f'<div style="'
+                        f'background: #DDF5E9;'
+                        f'color: #155B43;'
+                        f'font-weight: 600;'
+                        f'padding: 9px 12px;'
+                        f'border-left: 5px solid #55B98A;'
+                        f'margin: 6px 0;'
+                        f'border-radius: 5px;'
+                        f'font-size: 16px;'
+                        f'">'
+                        f'+ {html_esc.escape(ln)}'
+                        f'</div>'
                     )
+
+        # Nội dung mới được chèn thêm
         elif tag == "insert":
             for ln in new_lines[j1:j2]:
                 html_parts.append(
-                    f'<div style="background:#123b3a; color:#bbf7e7; font-weight:500; '
-                    f'padding:4px 8px; border-left:4px solid #34d399; margin:4px 0; border-radius:4px;">'
-                    f"+ {html_esc.escape(ln)}</div>"
+                    f'<div style="'
+                    f'background: #DDF5E9;'
+                    f'color: #155B43;'
+                    f'font-weight: 600;'
+                    f'padding: 9px 12px;'
+                    f'border-left: 5px solid #55B98A;'
+                    f'margin: 6px 0;'
+                    f'border-radius: 5px;'
+                    f'font-size: 16px;'
+                    f'">'
+                    f'+ {html_esc.escape(ln)}'
+                    f'</div>'
                 )
+
     html_parts.append("</div>")
+
     return "".join(html_parts)
+
 
 
 def interactive_consolidate(base_text: str, amend_text: str):
