@@ -1,4 +1,4 @@
-import os
+fimport os
 import re
 import json
 import pickle
@@ -941,9 +941,9 @@ with st.sidebar:
 
 left_col, right_col = st.columns([5, 7], gap="large")
 with left_col:
-    st.subheader("1. Văn bản pháp luật gốc (Base Document)")
+    st.subheader("1. Văn bản pháp luật gốc ")
     base_text = st.text_area("Văn bản gốc", value=SAMPLE_BASE, height=230, label_visibility="collapsed")
-    st.subheader("2. Nội dung văn bản sửa đổi, bổ sung (Amendment)")
+    st.subheader("2. Nội dung văn bản sửa đổi, bổ sung ")
     amend_text = st.text_area("Nội dung sửa đổi", value=SAMPLE_AMEND_OK, height=190, label_visibility="collapsed")
 
 with right_col:
@@ -969,7 +969,7 @@ if run_button:
                 logs, diff_html, ast_text = interactive_consolidate(base_text, amend_text)
             ast_placeholder.text_area("AST", value=ast_text, height=110, label_visibility="collapsed")
             log_placeholder.text_area("Nhật ký xử lý", value=logs, height=350, label_visibility="collapsed")
-            st.subheader("4. Văn bản sau hợp nhất (Visual Diff)")
+            st.subheader("4. Văn bản sau hợp nhất ")
             st.markdown(diff_html, unsafe_allow_html=True)
         except Exception as exc:
             st.exception(exc)
